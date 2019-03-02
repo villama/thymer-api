@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://gitlab.com/illama/thymer-api/issues"
   },
-  "homepage": "https://gitlab.com/illama/thymer-api#readme"
+  "homepage": "https://gitlab.com/illama/thymer-api#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
