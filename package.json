@@ -1,0 +1,19 @@
+{
+  "name": "thymer-api",
+  "version": "1.0.0",
+  "description": "The API for Thymer.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://illama@gitlab.com/illama/thymer-api.git"
+  },
+  "author": "Julius Villamayor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/illama/thymer-api/issues"
+  },
+  "homepage": "https://gitlab.com/illama/thymer-api#readme"
+}
