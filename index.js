@@ -1,6 +1,7 @@
 const express = require("express")
-const app = express()
 const query = require("./query")
+
+const app = express()
 
 app.get("/", (req, res) => {
   return res.send("Hello Cara!")
