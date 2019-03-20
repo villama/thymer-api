@@ -1,0 +1,11 @@
+create table accounts (
+  user_id serial primary key,
+  username varchar(40) unique not null,
+  email varchar(254) unique not null,
+  password varchar(200) not null,
+  first_name varchar(100) not null,
+  last_name varchar(100) not null,
+  created_on timestamp not null,
+  last_login timestamp,
+  timers jsonb default '{}' not null
+);

@@ -5,7 +5,7 @@ const pool = new Pool({
   ssl: process.env.REQUIRE_SSL.toLowerCase() == "true"
 })
 
-// query(text, values, callback(err, result)) {
+// query(text, values, callback(err, result))
 module.exports = async (text, values, callback) => {
   // Get a client from the connection pool
   const client = await pool.connect()
