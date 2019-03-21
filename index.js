@@ -25,7 +25,7 @@ app.post("/register", (req, res) => {
     "select username from accounts where lower(username) = lower($1)",
     [username],
     (err, result) => {
-      if (err) return res.status(500).send(err)
+      if (err) return res.status(500)
       if (result.rowCount > 0) {
         console.log(`Username ${username} is taken`)
         return res.status(409).send(`Username ${username} is taken`)
@@ -35,7 +35,7 @@ app.post("/register", (req, res) => {
         "select email from accounts where lower(email) = lower($1)",
         [email],
         (err, result) => {
-          if (err) return res.status(500).send(err)
+          if (err) return res.status(500)
           if (result.rowCount > 0) {
             console.log(`Email ${email} is taken`)
             return res.status(409).send(`Email ${email} is taken`)
@@ -66,13 +66,44 @@ app.post("/register", (req, res) => {
   )
 })
 
+app.post("/login", (req, res) => {
+  // Validate request
+  const joi = validate.login(req.body)
+  if (joi.error) {
+    console.log(joi.error.message)
+    return res.status(422).send(joi.error.message)
+  }
+
+  const { username, email, password } = req.body
+
+  if ((!username && !email) || (username && email)) {
+    console.log("Username xor email required")
+    return res.status(422).send("Username xor email required")
+  }
+
+  // Find the user
+  var column = username ? "username" : "email"
+  query(
+    `select * from accounts where lower(${column}) = lower($1)`,
+    [username ? username : email],
+    (err, result) => {
+      if (err) return res.status(500)
+      if (result.rowCount == 0) {
+        console.log("No user found")
+        return res.status(403).send("Incorrect credentials")
+      }
+      // Match the password
+      if (result.rows[0].password != password) {
+        console.log("Incorrect password")
+        return res.status(403).send("Incorrect credentials")
+      }
+      console.log("Login successful")
+      delete result.rows[0].password
+      res.status(200).send(result.rows[0])
+    }
+  )
+})
+
 app.listen(process.env.PORT, () =>
   console.log(`thymer app listening on port ${process.env.PORT}`)
 )
-
-// ***
-
-// query("select * from accounts", [], (err, result) => {
-//   if (err) return console.log(err)
-//   console.log(result)
-// })
