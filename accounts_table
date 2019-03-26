@@ -9,3 +9,6 @@ create table accounts (
   last_login timestamp,
   timers jsonb default '{}' not null
 );
+
+
+https://regexper.com/#%5E%5Ba-zA-Z0-9%5D%2B%28%3F%3A%5B_-%5D%3F%5Ba-zA-Z0-9%5D%29*%24

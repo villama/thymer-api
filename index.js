@@ -1,6 +1,7 @@
 const express = require("express")
 const query = require("./query")
 const validate = require("./validate")
+var bcrypt = require("bcryptjs")
 
 const app = express()
 
@@ -16,6 +17,10 @@ app.post("/register", (req, res) => {
   if (joi.error) {
     console.log(joi.error.message)
     return res.status(422).send(joi.error.message)
+  }
+  if (!req.body.username.match("^[a-zA-Z0-9]+(?:[_-]?[a-zA-Z0-9])*$")) {
+    console.log("Illegal username format")
+    return res.status(422).send("Illegal username format")
   }
 
   const { username, email, password, first_name, last_name } = req.body
@@ -40,10 +45,12 @@ app.post("/register", (req, res) => {
             console.log(`Email ${email} is taken`)
             return res.status(409).send(`Email ${email} is taken`)
           }
+          // Hash password
+          const hash = bcrypt.hashSync(password, bcrypt.genSaltSync(13))
           // Insert user
           query(
             "insert into accounts (username, email, password, first_name, last_name, created_on) values ($1, $2, $3, $4, $5, current_timestamp)",
-            [username, email, password, first_name, last_name],
+            [username, email, hash, first_name.trim(), last_name.trim()],
             (err, result) => {
               if (err) return res.status(500)
               // Return user
@@ -92,8 +99,9 @@ app.post("/login", (req, res) => {
         console.log("No user found")
         return res.status(403).send("Incorrect credentials")
       }
-      // Match the password
-      if (result.rows[0].password != password) {
+      // Match the passwords
+      // if (result.rows[0].password != password) {
+      if (!bcrypt.compareSync(password, result.rows[0].password)) {
         console.log("Incorrect password")
         return res.status(403).send("Incorrect credentials")
       }
