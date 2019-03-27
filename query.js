@@ -11,10 +11,10 @@ module.exports = async (text, values, callback) => {
   const client = await pool.connect()
   // Query the database
   await client.query(text, values, (err, result) => {
-    // Print the err if there is one
-    if (err) console.log(err)
     // Release the client from the connection pool
     client.release()
+    // Print the err if there is one
+    if (err) console.log(err)
     // Run the callback function
     return callback(err, result)
   })
