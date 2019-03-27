@@ -18,6 +18,7 @@ app.post("/register", (req, res) => {
     console.log(joi.error.message)
     return res.status(422).send(joi.error.message)
   }
+  // Validate username
   if (!req.body.username.match("^[a-zA-Z0-9]+(?:[_-]?[a-zA-Z0-9])*$")) {
     console.log("Illegal username format")
     return res.status(422).send("Illegal username format")
