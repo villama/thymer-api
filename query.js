@@ -14,7 +14,7 @@ module.exports = async (text, values, callback) => {
     // Release the client from the connection pool
     client.release()
     // Print the err if there is one
-    if (err) console.log(err)
+    if (err) console.log(err.detail ? err.detail : err)
     // Run the callback function
     return callback(err, result)
   })

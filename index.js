@@ -33,7 +33,7 @@ app.post("/register", (req, res) => {
     "insert into accounts (username, email, password, first_name, last_name, created_on) values ($1, $2, $3, $4, $5, current_timestamp)",
     [username, email, hash, first_name.trim(), last_name.trim()],
     (err, result) => {
-      if (err) return res.status(500).send(err.detail)
+      if (err) return res.status(500).send(err.detail ? err.detail : err)
       // Return user
       query(
         "select * from accounts where lower(username) = lower($1)",
