@@ -21,7 +21,11 @@ app.post("/register", (req, res) => {
 
   const { username, email, password, first_name, last_name } = req.body
 
-  // Hash password
+  // Validate password without returning it
+  if (!password.match(/^(?=.*[A-Za-z])(?=.*\d)[!-~]{6,}$/)) {
+    console.log("Invalid characters in password")
+    return res.status(422).send("Invalid characters in password")
+  }
   const hash = bcrypt.hashSync(password, bcrypt.genSaltSync(13))
 
   // Insert user
