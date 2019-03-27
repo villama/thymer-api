@@ -1,7 +1,7 @@
 const express = require("express")
 const query = require("./query")
 const validate = require("./validate")
-var bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs")
 
 const app = express()
 
@@ -63,18 +63,17 @@ app.post("/login", (req, res) => {
   }
 
   // Find the user
-  var column = username ? "username" : "email"
+  const column = username ? "username" : "email"
   query(
     `select * from accounts where lower(${column}) = lower($1)`,
     [username ? username : email],
     (err, result) => {
-      if (err) return res.status(500)
+      if (err) return res.status(500).send(err.detail ? err.detail : err)
       if (result.rowCount == 0) {
         console.log("No user found")
         return res.status(403).send("Incorrect credentials")
       }
       // Match the passwords
-      // if (result.rows[0].password != password) {
       if (!bcrypt.compareSync(password, result.rows[0].password)) {
         console.log("Incorrect password")
         return res.status(403).send("Incorrect credentials")
